@@ -1,13 +1,11 @@
-
 import 'package:nevis/database_model/note_db_models.dart';
 import 'package:nevis/model/note_model.dart';
 
 class NoteRepository {
   Future<List> fetchNotes() async {
     List<NoteModel> noteList = [];
-    final notes =
-        await Note().select().orderByDesc("id").toList();
-        // await Note().select().orderByDesc("id").page(page, 10).toList();
+    final notes = await Note().select().orderByDesc("id").toList();
+    // await Note().select().orderByDesc("id").page(page, 10).toList();
     for (int i = 0; i < notes.length; i++) {
       noteList.add(NoteModel.fromORM(notes[i]));
     }
@@ -30,6 +28,16 @@ class NoteRepository {
     var isFinished = await noteDb.save();
     if (isFinished != null) return true;
     return false;
+  }
+
+  Future<bool> editNote(NoteModel oldNote, NoteModel newNote) async {
+    var noteObject = Note();
+    final noteData = await noteObject.getById(oldNote.id.toInt());
+    noteData.context = newNote.context;
+    noteData.title = newNote.title;
+    noteData.is_synced = newNote.isSynced;
+    noteData.save();
+    return true;
   }
 
   removeAll() async {
