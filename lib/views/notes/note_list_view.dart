@@ -21,11 +21,7 @@ class _NoteListViewState extends State<NoteListView> {
 
   void _scrollListener() {
     if (_scrollController.position.pixels ==
-        _scrollController.position.maxScrollExtent) {
-      setState(() {
-        // _bloc.fetchNoteList();
-      });
-    }
+        _scrollController.position.maxScrollExtent) {}
   }
 
   @override
@@ -85,4 +81,3 @@ class _NoteListViewState extends State<NoteListView> {
     _scrollController.dispose();
   }
 }
-
