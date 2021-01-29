@@ -9,6 +9,7 @@ class EditBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final noteBloc = BlocProvider.of<NoteBloc>(context);
     return Container(
       padding: EdgeInsets.only(left: 0.0, top: 0.0, bottom: 0.0),
       decoration: BoxDecoration(color: Color.fromRGBO(246, 246, 246, 1.0)),
@@ -64,21 +65,7 @@ class EditBox extends StatelessWidget {
           child: TextField(
             maxLines: null,
             decoration: InputDecoration(
-              suffixIcon: IconButton(
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                // color: Color.fromRGBO(13, 61, 114, 0.9),
-                // onPressed: () {
-                //   FlutterClipboard.paste().then((value) => setState(() {
-                //         controller.text = value;
-                //       }));
-                // },
-                icon: Icon(
-                  Icons.copy,
-                  size: 20,
-                ),
-              ),
-              fillColor: Colors.white,
+                fillColor: Colors.white,
               filled: true,
               contentPadding:
                   const EdgeInsets.only(left: 12.0, top: 8.0, bottom: 8.0),
