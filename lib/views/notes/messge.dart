@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:nevis/database_model/note_db_models.dart';
+import 'package:nevis/blocs/note_blocs.dart';
 import 'package:nevis/model/note_model.dart';
 
 class MessageCardView extends StatelessWidget {
@@ -30,7 +31,7 @@ class MessageCardView extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          noteView(),
+          noteView(context),
           SizedBox(
             height: 20,
           ),
@@ -40,13 +41,13 @@ class MessageCardView extends StatelessWidget {
     );
   }
 
-  Widget noteView() {
+  Widget noteView(BuildContext context) {
+    final noteBloc = BlocProvider.of<NoteBloc>(context);
     return InkWell(
-        onLongPress: () => {},
+        onLongPress: () => {print(note.id.toString())},
         child: Text(
           note.context.toString(),
           style: TextStyle(fontSize: 18.0, fontFamily: 'Source Sans Pro'),
-          // style: TextStyle(fontSize: 18.0, fontFamily: 'Mono'),
         ));
   }
 
@@ -58,7 +59,6 @@ class MessageCardView extends StatelessWidget {
         children: [
           Text(
             this.note.daysAgo,
-
             style: TextStyle(fontSize: 10.0, fontFamily: 'Source Sans Pro'),
           ),
           Text(
