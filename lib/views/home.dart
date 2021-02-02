@@ -28,10 +28,10 @@ class Home extends StatelessWidget {
                   )),
               child: SafeArea(
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Expanded(
-                        child: NoteListView(),
-                      ),
+                      NoteListView(),
                       EditBox()
                     ],
                   )))),
