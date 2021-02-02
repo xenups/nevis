@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nevis/blocs/note_blocs.dart';
@@ -40,13 +42,19 @@ class _NoteListViewState extends State<NoteListView> {
         return Center(child: CircularProgressIndicator());
       }
       if (state is NoteIsLoaded) {
-        return notesListViewBuilder(context, state.getNotes);
+        return Expanded(child: notesListViewBuilder(context, state.getNotes));
       }
       if (state is NoteIsNotLoaded) {
         return Text(
           "problem happened",
           style: TextStyle(fontSize: 60),
         );
+      }
+      if (state is ModifyNoteState) {
+        return Stack(
+          children: [ blurredBackground(),MessageCardView(state.getNote)],
+        );
+        return MessageCardView(state.getNote);
       }
       return Text("Nothing", style: TextStyle(fontSize: 60));
     });
@@ -61,7 +69,6 @@ class _NoteListViewState extends State<NoteListView> {
 
   Widget notesListViewBuilder(BuildContext context, List<NoteModel> notes) {
     return Container(
-      margin: EdgeInsets.only(left: 20, right: 20),
       child: ListView.builder(
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
@@ -79,5 +86,22 @@ class _NoteListViewState extends State<NoteListView> {
     // TODO: implement dispose
     super.dispose();
     _scrollController.dispose();
+  }
+
+  Widget blurredBackground() {
+    return SizedBox(
+      height: 200,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          ClipRRect(
+            // Clip it cleanly.
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
