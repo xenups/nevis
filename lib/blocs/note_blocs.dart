@@ -8,16 +8,14 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
   NoteRepository noteRepository = NoteRepository();
 
   NoteBloc(this.noteRepository) : super(NoteIsEmpty());
-
   NoteState get initialState => NoteIsLoading();
 
   @override
   Stream<NoteState> mapEventToState(NoteEvent event) async* {
-    if (event is ModifyNoteEvent) {
-      yield ModifyNoteState(event.currentNote);
-    }
     if (event is EditNoteEvent) {
       await noteRepository.editNote(event.oldNote, event.newNote);
+      List<NoteModel> notes = await noteRepository.fetchNotes();
+      yield NoteIsLoaded(notes);
     }
     if (event is AddNoteEvent) {
       await noteRepository.addNote(event.note);

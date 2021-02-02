@@ -3,6 +3,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:nevis/blocs/edit_area/edit_blocs.dart';
+import 'package:nevis/blocs/edit_area/edit_events.dart';
 import 'package:nevis/blocs/note_blocs.dart';
 import 'package:nevis/blocs/note_events.dart';
 import 'package:nevis/model/note_model.dart';
@@ -14,11 +16,12 @@ class MessageCardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final noteBloc = BlocProvider.of<NoteBloc>(context);
+    // ignore: close_sinks
+    final editAreaBloc = BlocProvider.of<EditAreaBloc>(context);
     return InkWell(
       onLongPress: () {
         print(note.id.toString());
-        noteBloc.add(ModifyNoteEvent(note));
+        editAreaBloc.add(ModifyEvent(note));
       },
       child: Container(
         margin: EdgeInsets.only(bottom: 10, left: 10, right: 10),
@@ -76,6 +79,4 @@ class MessageCardView extends StatelessWidget {
       ),
     );
   }
-
-
 }

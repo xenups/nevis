@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nevis/blocs/edit_area/edit_blocs.dart';
+import 'package:nevis/blocs/edit_area/edit_events.dart';
+import 'package:nevis/blocs/edit_area/edit_states.dart';
 import 'package:nevis/blocs/note_blocs.dart';
 import 'package:nevis/blocs/note_events.dart';
 import 'package:nevis/blocs/note_states.dart';
@@ -10,9 +13,8 @@ class EditBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final noteBloc = BlocProvider.of<NoteBloc>(context);
-    return BlocBuilder<NoteBloc, NoteState>(builder: (context, state) {
-      if (state is ModifyNoteState) {
+    return BlocBuilder<EditAreaBloc, EditState>(builder: (context, state) {
+      if (state is ModifyState) {
         this.controller.text = state.getNote.context;
         return editNote(context);
       }
@@ -57,8 +59,12 @@ class EditBox extends StatelessWidget {
   }
 
   Widget editButton(BuildContext context) {
+    // ignore: close_sinks
+    final editAreaBloc = BlocProvider.of<EditAreaBloc>(context);
+    // ignore: close_sinks
     final noteBloc = BlocProvider.of<NoteBloc>(context);
-    return BlocBuilder<NoteBloc, NoteState>(builder: (context, state) {
+    return BlocBuilder<EditAreaBloc, EditState>(builder: (context, state) {
+      print("hi babe");
       return Center(
           child: new SizedBox(
               width: 40,
@@ -74,23 +80,21 @@ class EditBox extends StatelessWidget {
                     color: Color.fromRGBO(13, 61, 114, 0.9),
                   ),
                   onPressed: () {
-                    if (state is ModifyNoteState) {
-                      print(state.getNote.context);
+                    if (state is ModifyState) {
                       NoteModel newNote = NoteModel();
-                      print(this.controller.text+"  controller value is");
                       NoteModel oldNote = state.getNote;
                       newNote.context = this.controller.text;
-                      print(newNote.context+"new note context is");
                       noteBloc.add(EditNoteEvent(oldNote, newNote));
+                      editAreaBloc.add(AddEvent());
                       noteBloc.add(FetchNoteEvent());
                       this.controller.clear();
                     }
-                    // noteBloc.add(AddNoteEvent(note: note));
                   })));
     });
   }
 
   Widget addButton(BuildContext context) {
+    // ignore: close_sinks
     final noteBloc = BlocProvider.of<NoteBloc>(context);
     return Center(
         child: new SizedBox(
@@ -111,7 +115,9 @@ class EditBox extends StatelessWidget {
                   note.context = this.controller.text;
                   this.controller.clear();
                   noteBloc.add(AddNoteEvent(note: note));
-                })));
+                })
+        )
+    );
   }
 
   Widget inputNoteText() {

@@ -20,15 +20,6 @@ class AddNoteEvent extends NoteEvent {
   List<Object> get props => [note];
 }
 
-class ModifyNoteEvent extends NoteEvent {
-  final NoteModel currentNote;
-
-  const ModifyNoteEvent(this.currentNote);
-
-  @override
-  List<Object> get props => [currentNote];
-}
-
 class EditNoteEvent extends NoteEvent {
   final NoteModel oldNote;
   final NoteModel newNote;

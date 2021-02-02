@@ -33,6 +33,8 @@ class NoteRepository {
   Future<bool> editNote(NoteModel oldNote, NoteModel newNote) async {
     var noteObject = Note();
     final noteData = await noteObject.getById(oldNote.id.toInt());
+    print("new note context " + newNote.context);
+    print("old note context " + oldNote.context);
     noteData.context = newNote.context;
     noteData.title = newNote.title;
     noteData.is_synced = newNote.isSynced;

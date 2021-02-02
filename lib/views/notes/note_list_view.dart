@@ -35,13 +35,14 @@ class _NoteListViewState extends State<NoteListView> {
   @override
   Widget build(BuildContext context) {
     final noteBloc = BlocProvider.of<NoteBloc>(context);
-
     noteBloc.add(FetchNoteEvent());
     return BlocBuilder<NoteBloc, NoteState>(builder: (context, state) {
       if (state is NoteIsLoading) {
+        print("too load mire");
         return Center(child: CircularProgressIndicator());
       }
       if (state is NoteIsLoaded) {
+        print("note is loaded");
         return Expanded(child: notesListViewBuilder(context, state.getNotes));
       }
       if (state is NoteIsNotLoaded) {
@@ -50,13 +51,11 @@ class _NoteListViewState extends State<NoteListView> {
           style: TextStyle(fontSize: 60),
         );
       }
-      if (state is ModifyNoteState) {
-        return Stack(
-          children: [ blurredBackground(),MessageCardView(state.getNote)],
-        );
-        return MessageCardView(state.getNote);
-      }
-      return Text("Nothing", style: TextStyle(fontSize: 60));
+      print("too akhari mire");
+      return Text(
+        "problem happened",
+        style: TextStyle(fontSize: 60),
+      );
     });
   }
 
