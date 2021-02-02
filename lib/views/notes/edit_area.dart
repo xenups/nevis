@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nevis/blocs/note_blocs.dart';
 import 'package:nevis/blocs/note_events.dart';
+import 'package:nevis/blocs/note_states.dart';
 import 'package:nevis/model/note_model.dart';
 
 class EditBox extends StatelessWidget {
@@ -10,6 +11,34 @@ class EditBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final noteBloc = BlocProvider.of<NoteBloc>(context);
+    return BlocBuilder<NoteBloc, NoteState>(builder: (context, state) {
+      if (state is ModifyNoteState) {
+        this.controller.text = state.getNote.context;
+        return editNote(context);
+      }
+      return addNote(context);
+    });
+  }
+
+  Widget editNote(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(left: 0.0, top: 0.0, bottom: 0.0),
+      decoration: BoxDecoration(color: Color.fromRGBO(246, 246, 246, 1.0)),
+      child: Row(
+        children: [
+          Expanded(
+            child: inputNoteText(),
+          ),
+          editButton(context),
+          SizedBox(
+            width: 15.0,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget addNote(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(left: 0.0, top: 0.0, bottom: 0.0),
       decoration: BoxDecoration(color: Color.fromRGBO(246, 246, 246, 1.0)),
@@ -25,6 +54,40 @@ class EditBox extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget editButton(BuildContext context) {
+    final noteBloc = BlocProvider.of<NoteBloc>(context);
+    return BlocBuilder<NoteBloc, NoteState>(builder: (context, state) {
+      return Center(
+          child: new SizedBox(
+              width: 40,
+              height: 40,
+              child: FlatButton(
+                  padding: EdgeInsets.all(0),
+                  highlightColor: Color.fromRGBO(13, 61, 114, 0.2),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(35.0)),
+                  child: new Icon(
+                    Icons.check,
+                    size: 40.0,
+                    color: Color.fromRGBO(13, 61, 114, 0.9),
+                  ),
+                  onPressed: () {
+                    if (state is ModifyNoteState) {
+                      print(state.getNote.context);
+                      NoteModel newNote = NoteModel();
+                      print(this.controller.text+"  controller value is");
+                      NoteModel oldNote = state.getNote;
+                      newNote.context = this.controller.text;
+                      print(newNote.context+"new note context is");
+                      noteBloc.add(EditNoteEvent(oldNote, newNote));
+                      noteBloc.add(FetchNoteEvent());
+                      this.controller.clear();
+                    }
+                    // noteBloc.add(AddNoteEvent(note: note));
+                  })));
+    });
   }
 
   Widget addButton(BuildContext context) {
@@ -65,7 +128,7 @@ class EditBox extends StatelessWidget {
           child: TextField(
             maxLines: null,
             decoration: InputDecoration(
-                fillColor: Colors.white,
+              fillColor: Colors.white,
               filled: true,
               contentPadding:
                   const EdgeInsets.only(left: 12.0, top: 8.0, bottom: 8.0),
