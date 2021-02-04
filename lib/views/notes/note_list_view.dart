@@ -5,9 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nevis/blocs/note_blocs.dart';
 import 'package:nevis/blocs/note_events.dart';
 import 'package:nevis/blocs/note_states.dart';
-import 'package:nevis/database_model/note_db_models.dart';
 import 'package:nevis/model/note_model.dart';
-import 'edit_area.dart';
 import 'messge.dart';
 
 class NoteListView extends StatefulWidget {
@@ -38,11 +36,9 @@ class _NoteListViewState extends State<NoteListView> {
     noteBloc.add(FetchNoteEvent());
     return BlocBuilder<NoteBloc, NoteState>(builder: (context, state) {
       if (state is NoteIsLoading) {
-        print("too load mire");
         return Center(child: CircularProgressIndicator());
       }
       if (state is NoteIsLoaded) {
-        print("note is loaded");
         return Expanded(child: notesListViewBuilder(context, state.getNotes));
       }
       if (state is NoteIsNotLoaded) {
@@ -51,7 +47,6 @@ class _NoteListViewState extends State<NoteListView> {
           style: TextStyle(fontSize: 60),
         );
       }
-      print("too akhari mire");
       return Text(
         "problem happened",
         style: TextStyle(fontSize: 60),

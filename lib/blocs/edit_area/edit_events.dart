@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:nevis/model/note_model.dart';
 
 abstract class EditAreaEvents extends Equatable {

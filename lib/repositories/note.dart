@@ -24,7 +24,6 @@ class NoteRepository {
 
   Future<bool> addNote(NoteModel note) async {
     Note noteDb = note.toORM();
-    print(note.createdDate.toString());
     var isFinished = await noteDb.save();
     if (isFinished != null) return true;
     return false;
@@ -33,12 +32,17 @@ class NoteRepository {
   Future<bool> editNote(NoteModel oldNote, NoteModel newNote) async {
     var noteObject = Note();
     final noteData = await noteObject.getById(oldNote.id.toInt());
-    print("new note context " + newNote.context);
-    print("old note context " + oldNote.context);
     noteData.context = newNote.context;
     noteData.title = newNote.title;
     noteData.is_synced = newNote.isSynced;
     noteData.save();
+    return true;
+  }
+
+  Future<bool> removeNote(NoteModel note) async {
+    var noteObject = Note();
+    final noteData = await noteObject.getById(note.id.toInt());
+    noteData.delete();
     return true;
   }
 

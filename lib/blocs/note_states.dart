@@ -27,6 +27,8 @@ class NoteIsNotLoaded extends NoteState {}
 
 class AddNote extends NoteState {}
 
+class NoteIsDeleted extends NoteState {}
+
 class ModifyNoteState extends NoteState {
   final NoteModel _note;
 

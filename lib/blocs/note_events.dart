@@ -20,6 +20,15 @@ class AddNoteEvent extends NoteEvent {
   List<Object> get props => [note];
 }
 
+class DeleteNoteEvent extends NoteEvent {
+  final NoteModel note;
+
+  const DeleteNoteEvent({@required this.note}) : assert(note != null);
+
+  @override
+  List<Object> get props => [note];
+}
+
 class EditNoteEvent extends NoteEvent {
   final NoteModel oldNote;
   final NoteModel newNote;

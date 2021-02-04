@@ -10,8 +10,10 @@ environment:
 
 dependencies:
   flutter_datetime_picker: ^1.2.8
+  flutter_slidable: ^0.5.7
   sqfentity:
   sqfentity_gen:
+  flutter_share: ^1.0.5
   http: ^0.12.2
   intl: ^0.16.1
   jiffy: ^3.0.1

@@ -24,11 +24,7 @@ class Home extends StatelessWidget {
                   gradient: new LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                // end: Alignment.bottomLeft,
                 colors: [
-                  // Colors.deepPurpleAccent,
-                  // Colors.white.withOpacity(0.87),
-                  //  Colors.purpleAccent,
                   Color.fromRGBO(60, 99, 130, 1.0),
                   Color.fromRGBO(7, 153, 146, 1.0),
                 ],
@@ -39,31 +35,6 @@ class Home extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [NoteListView(), EditBox()],
               )))),
-      // body: BlocProvider(
-      //     create: (BuildContext context) => NoteBloc(NoteRepository()),
-      //     child: Container(
-      //         decoration: new BoxDecoration(
-      //             gradient: new LinearGradient(
-      //               begin: Alignment.topCenter,
-      //               end: Alignment.bottomCenter,
-      //               // end: Alignment.bottomLeft,
-      //               colors: [
-      //                 // Colors.deepPurpleAccent,
-      //                 // Colors.white.withOpacity(0.87),
-      //                 //  Colors.purpleAccent,
-      //                 Color.fromRGBO(60, 99, 130, 1.0),
-      //                 Color.fromRGBO(7, 153, 146, 1.0),
-      //               ],
-      //             )),
-      //         child: SafeArea(
-      //             child: Column(
-      //               crossAxisAlignment: CrossAxisAlignment.stretch,
-      //               mainAxisAlignment: MainAxisAlignment.end,
-      //               children: [
-      //                 NoteListView(),
-      //                 EditBox()
-      //               ],
-      //             )))),
     );
   }
 }

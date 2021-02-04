@@ -12,6 +12,11 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
 
   @override
   Stream<NoteState> mapEventToState(NoteEvent event) async* {
+    if(event is DeleteNoteEvent){
+      await noteRepository.removeNote(event.note);
+      List<NoteModel> notes = await noteRepository.fetchNotes();
+      yield NoteIsLoaded(notes);
+    }
     if (event is EditNoteEvent) {
       await noteRepository.editNote(event.oldNote, event.newNote);
       List<NoteModel> notes = await noteRepository.fetchNotes();
