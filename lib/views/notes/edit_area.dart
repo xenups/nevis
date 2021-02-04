@@ -9,15 +9,19 @@ import 'package:nevis/blocs/note_states.dart';
 import 'package:nevis/model/note_model.dart';
 
 class EditBox extends StatelessWidget {
+  var focusNode = FocusNode();
   final controller = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<EditAreaBloc, EditState>(builder: (context, state) {
+      focusNode.unfocus();
       if (state is ModifyState) {
         this.controller.text = state.getNote.context;
+        focusNode.requestFocus();
         return editNote(context);
       }
+      focusNode.unfocus();
       return addNote(context);
     });
   }
@@ -87,6 +91,7 @@ class EditBox extends StatelessWidget {
                       noteBloc.add(EditNoteEvent(oldNote, newNote));
                       editAreaBloc.add(AddEvent());
                       noteBloc.add(FetchNoteEvent());
+                      focusNode.unfocus();
                       this.controller.clear();
                     }
                   })));
@@ -114,10 +119,9 @@ class EditBox extends StatelessWidget {
                   NoteModel note = NoteModel();
                   note.context = this.controller.text;
                   this.controller.clear();
+                  focusNode.unfocus();
                   noteBloc.add(AddNoteEvent(note: note));
-                })
-        )
-    );
+                })));
   }
 
   Widget inputNoteText() {
@@ -132,6 +136,8 @@ class EditBox extends StatelessWidget {
         child: Directionality(
           textDirection: TextDirection.ltr,
           child: TextField(
+            autofocus: false,
+            focusNode: focusNode,
             maxLines: null,
             decoration: InputDecoration(
               fillColor: Colors.white,
