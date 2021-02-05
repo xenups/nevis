@@ -6,8 +6,9 @@ import 'package:nevis/repositories/note.dart';
 
 import 'notes/edit_area.dart';
 import 'notes/note_list_view.dart';
-
 class Home extends StatelessWidget {
+  static const String id = "/home";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
