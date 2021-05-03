@@ -11,13 +11,14 @@ class ApiBaseHelper {
   Future<dynamic> get(String url) async {
     print('Api Get, url $url');
     var responseJson;
-    final response = await http.get(_baseUrl + url);
+    final Uri address = Uri(host: _baseUrl);
+    final response = await http.get(address);
     responseJson = _returnResponse(response);
     return responseJson;
 
-
     try {
-      final response = await http.get(_baseUrl + url);
+      final Uri address = Uri(host: _baseUrl);
+      final response = await http.get(address);
       responseJson = _returnResponse(response);
     } on SocketException {
       print('No net');
@@ -31,7 +32,8 @@ class ApiBaseHelper {
     print('Api Post, url $url');
     var responseJson;
     try {
-      final response = await http.post(_baseUrl + url, body: body);
+      final Uri address = Uri(host: _baseUrl+url);
+      final response = await http.post(address, body: body);
       responseJson = _returnResponse(response);
     } on SocketException {
       print('No net');
@@ -45,7 +47,8 @@ class ApiBaseHelper {
     print('Api Put, url $url');
     var responseJson;
     try {
-      final response = await http.put(_baseUrl + url, body: body);
+      final Uri address = Uri(host: _baseUrl+url);
+      final response = await http.put(address);
       responseJson = _returnResponse(response);
     } on SocketException {
       print('No net');
@@ -60,7 +63,8 @@ class ApiBaseHelper {
     print('Api delete, url $url');
     var apiResponse;
     try {
-      final response = await http.delete(_baseUrl + url);
+      final Uri address = Uri(host: _baseUrl+url);
+      final response = await http.delete(address);
       apiResponse = _returnResponse(response);
     } on SocketException {
       print('No net');
