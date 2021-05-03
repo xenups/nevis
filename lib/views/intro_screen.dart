@@ -14,7 +14,7 @@ class IntroScreen extends StatefulWidget {
 }
 
 class IntroScreenState extends State<IntroScreen> {
-  List<Slide> slides = new List();
+  List<Slide> slides =[];
   double height;
   double width;
   Function goToTab;
@@ -92,7 +92,7 @@ class IntroScreenState extends State<IntroScreen> {
   }
 
   List<Widget> renderListCustomTabs() {
-    List<Widget> tabs = new List();
+    List<Widget> tabs = [];
     for (int i = 0; i < slides.length; i++) {
       Slide currentSlide = slides[i];
       tabs.add(Container(
@@ -163,7 +163,7 @@ class IntroScreenState extends State<IntroScreen> {
         },
 
         // Show or hide status bar
-        shouldHideStatusBar: true,
+        // shouldHideStatusBar: true,
 
         // On tab change completed
         onTabChangeCompleted: this.onTabChangeCompleted,
