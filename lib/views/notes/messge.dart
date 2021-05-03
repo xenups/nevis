@@ -35,7 +35,6 @@ class MessageCardView extends StatelessWidget {
                 onPressed: () {
                   shareText();
                 }),
-
             FocusedMenuItem(
                 title: Text("Edit"),
                 trailingIcon: Icon(Icons.edit),
@@ -60,7 +59,6 @@ class MessageCardView extends StatelessWidget {
                   showDialog(context);
                   // noteBloc.add(DeleteNoteEvent(note: note));
                 }),
-
           ],
           menuWidth: MediaQuery.of(context).size.width * 0.50,
           blurSize: 2.0,
@@ -86,18 +84,20 @@ class MessageCardView extends StatelessWidget {
       context: superContext,
       pageBuilder: (context, anim1, anim2) {
         return Align(
-          alignment: Alignment.bottomCenter,
-          child: Container(
-            height: 200,
-            child: deleteDialogAlert(superContext),
-            margin: EdgeInsets.only(bottom: 0, left: 0, right: 0),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(15), topLeft: Radius.circular(15)),
-            ),
-          ),
-        );
+            alignment: Alignment.bottomCenter,
+            child: SafeArea(
+              child: Container(
+                height: 200,
+                child: deleteDialogAlert(superContext),
+                margin: EdgeInsets.only(bottom: 0, left: 0, right: 0),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(15),
+                      topLeft: Radius.circular(15)),
+                ),
+              ),
+            ));
       },
       transitionBuilder: (context, anim1, anim2, child) {
         return SlideTransition(
@@ -109,11 +109,11 @@ class MessageCardView extends StatelessWidget {
     );
   }
 
-  shareText() async{
+  shareText() async {
     print("share called");
     await FlutterShare.share(
-        title: "copied from nevis",
-        text: note.context.toString(),
+      title: "copied from nevis",
+      text: note.context.toString(),
     );
   }
 
@@ -130,10 +130,11 @@ class MessageCardView extends StatelessWidget {
           Text(
             "Would you like to delete this note ?",
             style: TextStyle(
-              fontSize: 15.0,
-              color: Colors.black,
-              decoration: TextDecoration.none,
-            ),
+                fontSize: 15.0,
+                color: Colors.black,
+                decoration: TextDecoration.none,
+                fontWeight: FontWeight.normal,
+                fontFamily: 'RobotoMono'),
           ),
           SizedBox(
             height: 20,
