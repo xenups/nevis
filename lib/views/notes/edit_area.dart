@@ -118,6 +118,9 @@ class EditBox extends StatelessWidget {
                 onPressed: () {
                   NoteModel note = NoteModel();
                   note.context = this.controller.text;
+                  note.title = "default";
+                  note.createdDate = DateTime.now();
+                  note.isSynced = true;
                   this.controller.clear();
                   focusNode.unfocus();
                   noteBloc.add(AddNoteEvent(note: note));
