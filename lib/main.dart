@@ -4,7 +4,10 @@ import 'package:nevis/views/intro_screen.dart';
 import 'package:nevis/views/splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+import 'database_model/util.dart';
+
+Future<void> main() async {
+  await setupLocator();
   runApp(MyApp());
 }
 
