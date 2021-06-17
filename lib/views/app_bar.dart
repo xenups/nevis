@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nevis/views/category_selector.dart';
+import 'package:nevis/views/spear_menu2/spear_menu2.dart';
 
 class NevisAppBar extends PreferredSize {
-  NevisAppBar() : super();
+  const NevisAppBar({Key key});
 
   @override
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
@@ -10,7 +11,7 @@ class NevisAppBar extends PreferredSize {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      iconTheme: IconThemeData(color: Colors.white),
+        iconTheme: IconThemeData(color: Colors.white),
       elevation: 0.0,
       // toolbarHeight: 40.0,
       brightness: Brightness.light,

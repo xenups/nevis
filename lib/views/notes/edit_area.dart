@@ -85,10 +85,12 @@ class EditBox extends StatelessWidget {
                   ),
                   onPressed: () {
                     if (state is ModifyState) {
-                      NoteModel newNote = NoteModel();
-                      NoteModel oldNote = state.getNote;
-                      newNote.context = this.controller.text;
-                      noteBloc.add(EditNoteEvent(oldNote, newNote));
+                      NoteModel note = state.getNote;
+                      note.context = this.controller.text;
+                      note.createdDate = DateTime.now();
+                      note.isSynced = true;
+                      note.title = "default";
+                      noteBloc.add(EditNoteEvent(note));
                       editAreaBloc.add(AddEvent());
                       noteBloc.add(FetchNoteEvent());
                       focusNode.unfocus();
@@ -119,6 +121,7 @@ class EditBox extends StatelessWidget {
                   NoteModel note = NoteModel();
                   note.context = this.controller.text;
                   note.title = "default";
+                  note.category = 2;
                   note.createdDate = DateTime.now();
                   note.isSynced = true;
                   this.controller.clear();

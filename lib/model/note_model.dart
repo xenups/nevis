@@ -1,5 +1,6 @@
 import 'package:jiffy/jiffy.dart';
 import 'package:nevis/database_model/moor_db.dart';
+import 'package:nevis/model/category_model.dart';
 
 class NoteModel {
   int id;
@@ -9,6 +10,7 @@ class NoteModel {
   bool isSynced;
   DateTime createdDate;
   String daysAgo;
+  int category;
 
   NoteModel(
       {this.id,
@@ -17,7 +19,8 @@ class NoteModel {
       this.isSynced,
       this.createdDate,
       this.daysAgo,
-      this.totalPages});
+      this.totalPages,
+      this.category});
 
   NoteModel.fromJson(Map<String, dynamic> json) {
     this.id = json["id"];
@@ -25,6 +28,7 @@ class NoteModel {
     this.context = json["context"];
     this.isSynced = json["is_synced"];
     this.createdDate = json["created_date"];
+    this.category = json["category"];
     this.daysAgo = Jiffy(createdDate).fromNow();
   }
 
@@ -34,6 +38,7 @@ class NoteModel {
     this.context = note.content;
     this.isSynced = note.synced;
     this.createdDate = note.dateAdded;
+    this.category = note.category;
     this.daysAgo = Jiffy(createdDate).fromNow();
   }
 
@@ -44,6 +49,7 @@ class NoteModel {
         content: this.context,
         synced: this.isSynced,
         dateAdded: this.createdDate,
+        category: this.category,
         dateSynced: this.createdDate);
   }
 

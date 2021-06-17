@@ -1,5 +1,6 @@
 import 'package:nevis/database_model/moor_db.dart';
 import 'package:nevis/database_model/util.dart';
+import 'package:nevis/model/category_model.dart';
 import 'package:nevis/model/note_model.dart';
 
 class NoteRepository {
@@ -10,63 +11,56 @@ class NoteRepository {
       print(notes[i].title);
       noteList.add(NoteModel.fromMoor(notes[i]));
     }
-
     return noteList;
-
-    // var dbHelper = Helper();
-    // return dbHelper.getAllUsers();
-
-    // List<NoteModel> noteList = [];
-    // final notes = await Note().select().orderByDesc("id").toList();
-    // // await Note().select().orderByDesc("id").page(page, 10).toList();
-    // for (int i = 0; i < notes.length; i++) {
-    //   noteList.add(NoteModel.fromMap(notes[i]));
-    // }
-    // return noteList;
   }
 
-  // Future<int> getNotesCount() async {
-  //   final notes = await Note().select().toList();
-  //   return notes.length;
-  // }
-  //
-  // Future<int> getPageCount() async {
-  //   int count = await getNotesCount();
-  //   return (count / 10).ceil();
-  // }
+  Future<List> fetchCategoryNotes(CategoryModel category) async {
+    List<NoteModel> noteList = [];
+    var notes = await locator<AppDatabase>().getAllNotesByCategory(category);
+    for (int i = 0; i < notes.length; i++) {
+      print(notes[i].content+"aaaaaaaaaaaaaaaaaaaaaar");
+      noteList.add(NoteModel.fromMoor(notes[i]));
+    }
+    return noteList;
+  }
+
+  Future<List> fetchCategories() async {
+    List<CategoryModel> categoryList = [];
+    var categories = await locator<AppDatabase>().getAllCategories();
+    for (int i = 0; i < categories.length; i++) {
+      print(categories[i].name);
+      categoryList.add(CategoryModel.fromMoor(categories[i]));
+    }
+    return categoryList;
+  }
+
+  Future<bool> addCategory(CategoryModel category) async {
+    await locator<AppDatabase>().insertCategory(category.toMoor());
+    return true;
+  }
+
+  Future<bool> editCategory(CategoryModel category) async {
+    await locator<AppDatabase>().updateCategory(category.toMoor());
+    return true;
+  }
+
+  Future<bool> removeCategory(CategoryModel category) async {
+    await locator<AppDatabase>().deleteCategory(category.toMoor());
+    return true;
+  }
 
   Future<bool> addNote(NoteModel note) async {
     await locator<AppDatabase>().insertNote(note.toMoor());
     return true;
-    // var dbHelper = Helper();
-    // note.title = "default";
-    // note.isSynced = 1;
-    // dbHelper.insert(note);
-    //
-    // return true;
-    // Note noteDb = note.toORM();
-    // var isFinished = await noteDb.save();
-    // if (isFinished != null) return true;
-    // return false;
   }
 
-  Future<bool> editNote(NoteModel oldNote, NoteModel newNote) async {
-    // var dbHelper = Helper();
-    // // dbHelper.update(note);
-    // return true;
-    // var noteObject = Note();
-    // final noteData = await noteObject.getById(oldNote.id.toInt());
-    // noteData.context = newNote.context;
-    // noteData.title = newNote.title;
-    // noteData.is_synced = newNote.isSynced;
-    // noteData.save();
-    // return true;
+  Future<bool> editNote(NoteModel note) async {
+    await locator<AppDatabase>().updateNote(note.toMoor());
+    return true;
   }
 
   Future<bool> removeNote(NoteModel note) async {
-    // var dbHelper = Helper();
-    // dbHelper.deleteNote(note.id);
-    // return true;
+    await locator<AppDatabase>().deleteNote(note.toMoor());
     return true;
   }
 }

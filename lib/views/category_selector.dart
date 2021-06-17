@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nevis/blocs/note_blocs.dart';
+import 'package:nevis/blocs/note_events.dart';
+import 'package:nevis/blocs/note_states.dart';
+import 'package:nevis/model/category_model.dart';
 import 'package:nevis/views/custom_data.dart';
 import 'package:nevis/views/spear_menu2/spear_menu2.dart';
 
@@ -10,16 +15,28 @@ class CategorySelector extends StatefulWidget {
 class _CategorySelectorState extends State<CategorySelector> {
   final GlobalKey btnKey = GlobalKey();
   final List<CustomData> menuList = [];
+  CategoryModel currentCategory;
+
   String selectedMenu = "All";
 
   @override
   Widget build(BuildContext context) {
-    // SpearMenu.context = context;
+    SpearMenu.context = context;
+    return BlocBuilder<NoteBloc, NoteState>(builder: (context, state) {
+      if (state is NoteIsLoaded) {
+        List<CategoryModel> categories = state.getCategories;
+        return loadCategoriesView(categories);
+      }
+      return Text("problem happened");
+    });
+  }
+
+  Widget loadCategoriesView(List<CategoryModel> categories) {
     return Container(
         child: GestureDetector(
             key: btnKey,
             onTap: () {
-              menuData(btnKey);
+              menuData(btnKey, categories);
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -34,34 +51,20 @@ class _CategorySelectorState extends State<CategorySelector> {
             )));
   }
 
-  void menuData(GlobalKey btnKey) {
+  void menuData(GlobalKey btnKey, List<CategoryModel> categories) {
     if (menuList.isEmpty) {
       menuList.clear();
-      menuList.add(CustomData('1', false));
-      menuList.add(CustomData('2', false));
-      menuList.add(CustomData('3', false));
-      menuList.add(CustomData('Setting', false));
-      menuList.add(CustomData('5', false));
-      menuList.add(CustomData('6', false));
-      menuList.add(CustomData('7', false));
-      menuList.add(CustomData('8', false));
-      menuList.add(CustomData('9', false));
-      menuList.add(CustomData('11', false));
-      menuList.add(CustomData('21', false));
-      menuList.add(CustomData('13', false));
-      menuList.add(CustomData('14', false));
-      menuList.add(CustomData('15', false));
-      menuList.add(CustomData('16', false));
-      menuList.add(CustomData('17', false));
-      menuList.add(CustomData('18', false));
-      menuList.add(CustomData('122', false));
+      currentCategory = categories[0];
+      for (int i = 0; i < categories.length; i++) {
+        menuList.add(CustomData(categories[i], false));
+      }
     }
 
     List<MenuItemProvider> setData = [];
     setData.clear();
     for (var io in menuList) {
-      print("Result : " + io.name);
-      setData.add(MenuItem(title: io.name, isActive: io.isShow));
+      print("Result : " + io.category.name);
+      setData.add(MenuItem(title: io.category.name, isActive: io.isShow));
     }
 
     SpearMenu menu = SpearMenu(
@@ -75,11 +78,17 @@ class _CategorySelectorState extends State<CategorySelector> {
   }
 
   void onClickMenu(MenuItemProvider item) {
+    final noteBloc = BlocProvider.of<NoteBloc>(context);
     menuList.map((element) {
-      if (item.menuTitle == element.name) {
+      if (item.menuTitle == element.category.name) {
         element.isShow = true;
+        CategoryModel category = CategoryModel();
+        category = element.category;
+        print("category id isssss"+category.id.toString());
         setState(() {
-          selectedMenu = element.name;
+          selectedMenu = element.category.name;
+          print(category.name);
+          noteBloc.add(FetchNoteEvent(category: category));
         });
       } else {
         element.isShow = false;

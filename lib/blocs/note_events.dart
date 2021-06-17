@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:nevis/model/category_model.dart';
 import 'package:nevis/model/note_model.dart';
 
 abstract class NoteEvent extends Equatable {
@@ -9,7 +10,32 @@ abstract class NoteEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class FetchNoteEvent extends NoteEvent {}
+class FetchNoteEvent extends NoteEvent {
+  final CategoryModel category;
+
+  const FetchNoteEvent({@required this.category});
+
+  @override
+  List<Object> get props => [category];
+}
+
+class ChangeCategoryEvent extends NoteEvent {
+  final CategoryModel category;
+
+  ChangeCategoryEvent(this.category);
+
+  @override
+  List<Object> get props => [category];
+}
+
+class FetchCategoryEvent extends NoteEvent {
+  final CategoryModel category;
+
+  FetchCategoryEvent(this.category);
+
+  @override
+  List<Object> get props => [category];
+}
 
 class AddNoteEvent extends NoteEvent {
   final NoteModel note;
@@ -30,11 +56,10 @@ class DeleteNoteEvent extends NoteEvent {
 }
 
 class EditNoteEvent extends NoteEvent {
-  final NoteModel oldNote;
-  final NoteModel newNote;
+  final NoteModel note;
 
-  const EditNoteEvent(this.oldNote, this.newNote);
+  const EditNoteEvent(this.note);
 
   @override
-  List<Object> get props => [oldNote, newNote];
+  List<Object> get props => [note];
 }

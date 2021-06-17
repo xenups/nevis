@@ -9,6 +9,7 @@ part of 'moor_db.dart';
 // ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_this
 class Note extends DataClass implements Insertable<Note> {
   final int id;
+  final int category;
   final String title;
   final String content;
   final DateTime dateAdded;
@@ -16,6 +17,7 @@ class Note extends DataClass implements Insertable<Note> {
   final bool synced;
   Note(
       {@required this.id,
+      this.category,
       @required this.title,
       @required this.content,
       this.dateAdded,
@@ -30,6 +32,8 @@ class Note extends DataClass implements Insertable<Note> {
     final boolType = db.typeSystem.forDartType<bool>();
     return Note(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      category:
+          intType.mapFromDatabaseResponse(data['${effectivePrefix}category']),
       title:
           stringType.mapFromDatabaseResponse(data['${effectivePrefix}title']),
       content:
@@ -47,6 +51,9 @@ class Note extends DataClass implements Insertable<Note> {
     final map = <String, Expression>{};
     if (!nullToAbsent || id != null) {
       map['id'] = Variable<int>(id);
+    }
+    if (!nullToAbsent || category != null) {
+      map['category'] = Variable<int>(category);
     }
     if (!nullToAbsent || title != null) {
       map['title'] = Variable<String>(title);
@@ -69,6 +76,9 @@ class Note extends DataClass implements Insertable<Note> {
   NotesCompanion toCompanion(bool nullToAbsent) {
     return NotesCompanion(
       id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      category: category == null && nullToAbsent
+          ? const Value.absent()
+          : Value(category),
       title:
           title == null && nullToAbsent ? const Value.absent() : Value(title),
       content: content == null && nullToAbsent
@@ -90,6 +100,7 @@ class Note extends DataClass implements Insertable<Note> {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return Note(
       id: serializer.fromJson<int>(json['id']),
+      category: serializer.fromJson<int>(json['category']),
       title: serializer.fromJson<String>(json['title']),
       content: serializer.fromJson<String>(json['content']),
       dateAdded: serializer.fromJson<DateTime>(json['dateAdded']),
@@ -102,6 +113,7 @@ class Note extends DataClass implements Insertable<Note> {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
+      'category': serializer.toJson<int>(category),
       'title': serializer.toJson<String>(title),
       'content': serializer.toJson<String>(content),
       'dateAdded': serializer.toJson<DateTime>(dateAdded),
@@ -112,6 +124,7 @@ class Note extends DataClass implements Insertable<Note> {
 
   Note copyWith(
           {int id,
+          int category,
           String title,
           String content,
           DateTime dateAdded,
@@ -119,6 +132,7 @@ class Note extends DataClass implements Insertable<Note> {
           bool synced}) =>
       Note(
         id: id ?? this.id,
+        category: category ?? this.category,
         title: title ?? this.title,
         content: content ?? this.content,
         dateAdded: dateAdded ?? this.dateAdded,
@@ -129,6 +143,7 @@ class Note extends DataClass implements Insertable<Note> {
   String toString() {
     return (StringBuffer('Note(')
           ..write('id: $id, ')
+          ..write('category: $category, ')
           ..write('title: $title, ')
           ..write('content: $content, ')
           ..write('dateAdded: $dateAdded, ')
@@ -142,16 +157,19 @@ class Note extends DataClass implements Insertable<Note> {
   int get hashCode => $mrjf($mrjc(
       id.hashCode,
       $mrjc(
-          title.hashCode,
+          category.hashCode,
           $mrjc(
-              content.hashCode,
-              $mrjc(dateAdded.hashCode,
-                  $mrjc(dateSynced.hashCode, synced.hashCode))))));
+              title.hashCode,
+              $mrjc(
+                  content.hashCode,
+                  $mrjc(dateAdded.hashCode,
+                      $mrjc(dateSynced.hashCode, synced.hashCode)))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
       (other is Note &&
           other.id == this.id &&
+          other.category == this.category &&
           other.title == this.title &&
           other.content == this.content &&
           other.dateAdded == this.dateAdded &&
@@ -161,6 +179,7 @@ class Note extends DataClass implements Insertable<Note> {
 
 class NotesCompanion extends UpdateCompanion<Note> {
   final Value<int> id;
+  final Value<int> category;
   final Value<String> title;
   final Value<String> content;
   final Value<DateTime> dateAdded;
@@ -168,6 +187,7 @@ class NotesCompanion extends UpdateCompanion<Note> {
   final Value<bool> synced;
   const NotesCompanion({
     this.id = const Value.absent(),
+    this.category = const Value.absent(),
     this.title = const Value.absent(),
     this.content = const Value.absent(),
     this.dateAdded = const Value.absent(),
@@ -176,6 +196,7 @@ class NotesCompanion extends UpdateCompanion<Note> {
   });
   NotesCompanion.insert({
     this.id = const Value.absent(),
+    this.category = const Value.absent(),
     @required String title,
     @required String content,
     this.dateAdded = const Value.absent(),
@@ -185,6 +206,7 @@ class NotesCompanion extends UpdateCompanion<Note> {
         content = Value(content);
   static Insertable<Note> custom({
     Expression<int> id,
+    Expression<int> category,
     Expression<String> title,
     Expression<String> content,
     Expression<DateTime> dateAdded,
@@ -193,6 +215,7 @@ class NotesCompanion extends UpdateCompanion<Note> {
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
+      if (category != null) 'category': category,
       if (title != null) 'title': title,
       if (content != null) 'content': content,
       if (dateAdded != null) 'date_added': dateAdded,
@@ -203,6 +226,7 @@ class NotesCompanion extends UpdateCompanion<Note> {
 
   NotesCompanion copyWith(
       {Value<int> id,
+      Value<int> category,
       Value<String> title,
       Value<String> content,
       Value<DateTime> dateAdded,
@@ -210,6 +234,7 @@ class NotesCompanion extends UpdateCompanion<Note> {
       Value<bool> synced}) {
     return NotesCompanion(
       id: id ?? this.id,
+      category: category ?? this.category,
       title: title ?? this.title,
       content: content ?? this.content,
       dateAdded: dateAdded ?? this.dateAdded,
@@ -223,6 +248,9 @@ class NotesCompanion extends UpdateCompanion<Note> {
     final map = <String, Expression>{};
     if (id.present) {
       map['id'] = Variable<int>(id.value);
+    }
+    if (category.present) {
+      map['category'] = Variable<int>(category.value);
     }
     if (title.present) {
       map['title'] = Variable<String>(title.value);
@@ -246,6 +274,7 @@ class NotesCompanion extends UpdateCompanion<Note> {
   String toString() {
     return (StringBuffer('NotesCompanion(')
           ..write('id: $id, ')
+          ..write('category: $category, ')
           ..write('title: $title, ')
           ..write('content: $content, ')
           ..write('dateAdded: $dateAdded, ')
@@ -267,6 +296,15 @@ class $NotesTable extends Notes with TableInfo<$NotesTable, Note> {
   GeneratedIntColumn _constructId() {
     return GeneratedIntColumn('id', $tableName, false,
         hasAutoIncrement: true, declaredAsPrimaryKey: true);
+  }
+
+  final VerificationMeta _categoryMeta = const VerificationMeta('category');
+  GeneratedIntColumn _category;
+  @override
+  GeneratedIntColumn get category => _category ??= _constructCategory();
+  GeneratedIntColumn _constructCategory() {
+    return GeneratedIntColumn('category', $tableName, true,
+        $customConstraints: 'NULL REFERENCES categories(id) ON DELETE CASCADE');
   }
 
   final VerificationMeta _titleMeta = const VerificationMeta('title');
@@ -325,7 +363,7 @@ class $NotesTable extends Notes with TableInfo<$NotesTable, Note> {
 
   @override
   List<GeneratedColumn> get $columns =>
-      [id, title, content, dateAdded, dateSynced, synced];
+      [id, category, title, content, dateAdded, dateSynced, synced];
   @override
   $NotesTable get asDslTable => this;
   @override
@@ -339,6 +377,10 @@ class $NotesTable extends Notes with TableInfo<$NotesTable, Note> {
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
+    }
+    if (data.containsKey('category')) {
+      context.handle(_categoryMeta,
+          category.isAcceptableOrUnknown(data['category'], _categoryMeta));
     }
     if (data.containsKey('title')) {
       context.handle(
@@ -383,12 +425,197 @@ class $NotesTable extends Notes with TableInfo<$NotesTable, Note> {
   }
 }
 
+class Categorie extends DataClass implements Insertable<Categorie> {
+  final int id;
+  final String name;
+  Categorie({@required this.id, @required this.name});
+  factory Categorie.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final intType = db.typeSystem.forDartType<int>();
+    final stringType = db.typeSystem.forDartType<String>();
+    return Categorie(
+      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || id != null) {
+      map['id'] = Variable<int>(id);
+    }
+    if (!nullToAbsent || name != null) {
+      map['name'] = Variable<String>(name);
+    }
+    return map;
+  }
+
+  CategoriesCompanion toCompanion(bool nullToAbsent) {
+    return CategoriesCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
+    );
+  }
+
+  factory Categorie.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return Categorie(
+      id: serializer.fromJson<int>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'name': serializer.toJson<String>(name),
+    };
+  }
+
+  Categorie copyWith({int id, String name}) => Categorie(
+        id: id ?? this.id,
+        name: name ?? this.name,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('Categorie(')
+          ..write('id: $id, ')
+          ..write('name: $name')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf($mrjc(id.hashCode, name.hashCode));
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is Categorie && other.id == this.id && other.name == this.name);
+}
+
+class CategoriesCompanion extends UpdateCompanion<Categorie> {
+  final Value<int> id;
+  final Value<String> name;
+  const CategoriesCompanion({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+  });
+  CategoriesCompanion.insert({
+    this.id = const Value.absent(),
+    @required String name,
+  }) : name = Value(name);
+  static Insertable<Categorie> custom({
+    Expression<int> id,
+    Expression<String> name,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+    });
+  }
+
+  CategoriesCompanion copyWith({Value<int> id, Value<String> name}) {
+    return CategoriesCompanion(
+      id: id ?? this.id,
+      name: name ?? this.name,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CategoriesCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $CategoriesTable extends Categories
+    with TableInfo<$CategoriesTable, Categorie> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $CategoriesTable(this._db, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  GeneratedIntColumn _id;
+  @override
+  GeneratedIntColumn get id => _id ??= _constructId();
+  GeneratedIntColumn _constructId() {
+    return GeneratedIntColumn('id', $tableName, false,
+        hasAutoIncrement: true, declaredAsPrimaryKey: true);
+  }
+
+  final VerificationMeta _nameMeta = const VerificationMeta('name');
+  GeneratedTextColumn _name;
+  @override
+  GeneratedTextColumn get name => _name ??= _constructName();
+  GeneratedTextColumn _constructName() {
+    return GeneratedTextColumn('name', $tableName, false,
+        minTextLength: 1, maxTextLength: 50);
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [id, name];
+  @override
+  $CategoriesTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'categories';
+  @override
+  final String actualTableName = 'categories';
+  @override
+  VerificationContext validateIntegrity(Insertable<Categorie> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name'], _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Categorie map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return Categorie.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  $CategoriesTable createAlias(String alias) {
+    return $CategoriesTable(_db, alias);
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   $NotesTable _notes;
   $NotesTable get notes => _notes ??= $NotesTable(this);
+  $CategoriesTable _categories;
+  $CategoriesTable get categories => _categories ??= $CategoriesTable(this);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [notes];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [notes, categories];
 }

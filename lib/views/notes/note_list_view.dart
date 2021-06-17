@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nevis/blocs/note_blocs.dart';
 import 'package:nevis/blocs/note_events.dart';
 import 'package:nevis/blocs/note_states.dart';
+import 'package:nevis/model/category_model.dart';
 import 'package:nevis/model/note_model.dart';
 import 'messge.dart';
 
@@ -34,6 +35,11 @@ class _NoteListViewState extends State<NoteListView> {
   Widget build(BuildContext context) {
     final noteBloc = BlocProvider.of<NoteBloc>(context);
     noteBloc.add(FetchNoteEvent());
+    print("fetch note called");
+    CategoryModel category = CategoryModel();
+    category.name = "All";
+    noteBloc.add(FetchCategoryEvent(category));
+    print("fetch category called");
     return BlocBuilder<NoteBloc, NoteState>(builder: (context, state) {
       if (state is NoteIsLoading) {
         return Center(child: CircularProgressIndicator());
